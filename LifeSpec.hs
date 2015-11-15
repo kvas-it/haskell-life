@@ -8,12 +8,12 @@ p11 = Point 1 1
 p12 = Point 1 2
 p21 = Point 2 1
 
-emptyWorld = []
-dyingWorld = [p00, p11]
-staticWorld = [p00, p01, p10, p11]
-fullWorld = p11 : surrounding p11
-blinkerX = [p01, p11, p21]
-blinkerY = [p10, p11, p12]
+emptyWorld = fromPoints []
+dyingWorld =  fromPoints [p00, p11]
+staticWorld = fromPoints [p00, p01, p10, p11]
+fullWorld = fromPoints (p11 : surrounding p11)
+blinkerX = fromPoints [p01, p11, p21]
+blinkerY = fromPoints [p10, p11, p12]
 
 dist (Point x y) (Point x' y') = max (abs (x-x')) (abs (y-y')) 
 
@@ -26,13 +26,10 @@ main = hspec $ do
             (all (\pt -> (dist pt p12) == 1) $ surrounding p12) `shouldBe` True
 
     describe "neighbours" $ do
-        it "should be picked" $ do
-            (neighbours dyingWorld p00) `shouldBe` [p11]
-            (neighbours staticWorld p00) `shouldBe` [p01, p10, p11] 
-            (neighbours blinkerX p00) `shouldBe` [p01, p11]
         it "should be counted" $ do
             (neighbourCount dyingWorld p00) `shouldBe` 1
             (neighbourCount staticWorld p00) `shouldBe` 3
+            (neighbourCount fullWorld p11) `shouldBe` 8
 
     describe "willBeAlive" $ do
         it "should kill lonely cells" $ do
