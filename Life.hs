@@ -28,5 +28,4 @@ uniq' (x:xs)
     | otherwise    = x : uniq' xs
 
 nextGeneration world = filter (willBeAlive world) candidates
-  where
-    candidates = uniq [p | p0 <- world, p <- surrounding p0]
+  where candidates = uniq [p | p0 <- world, p <- surrounding p0]
